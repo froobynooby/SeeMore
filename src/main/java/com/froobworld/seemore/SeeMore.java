@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class SeeMore extends JavaPlugin {
     private SeeMoreConfig config;
     private SchedulerHook schedulerHook;
+    private ViewDistanceController viewDistanceController;
 
     @Override
     public void onEnable() {
@@ -32,7 +33,7 @@ public class SeeMore extends JavaPlugin {
             schedulerHook = new BukkitSchedulerHook(this);
         }
 
-        new ViewDistanceController(this);
+        viewDistanceController = new ViewDistanceController(this);
 
         registerCommand();
 
@@ -56,6 +57,11 @@ public class SeeMore extends JavaPlugin {
 
     public void reload() throws Exception {
         config.load();
+        if (viewDistanceController != null) {
+
+            // Update the target view distance of all players in case the configured maximum has changed
+            viewDistanceController.updateAllPlayers();
+        }
     }
 
     public SeeMoreConfig getSeeMoreConfig() {

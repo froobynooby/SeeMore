@@ -24,6 +24,14 @@ public class ViewDistanceController {
         Bukkit.getPluginManager().registerEvents(new ViewDistanceUpdater(this), seeMore);
     }
 
+    public void updateAllPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            seeMore.getSchedulerHook().runEntityTaskAsap(() -> {
+                setTargetViewDistance(player, player.getClientViewDistance(), false);
+            }, null, player);
+        }
+    }
+
     public void setTargetViewDistance(Player player, int clientViewDistance, boolean testDelay) {
         int floor = player.getWorld().getSimulationDistance();
         int ceiling = Math.min(seeMore.getSeeMoreConfig().worldSettings.of(player.getWorld()).maximumViewDistance.get(), 32);
