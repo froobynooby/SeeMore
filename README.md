@@ -1,4 +1,5 @@
 # SeeMore
+[Hangar](https://hangar.papermc.io/froobynooby/SeeMore) | [Modrinth](https://modrinth.com/plugin/seemore) | [Dev Builds](https://ci.froobworld.com/job/SeeMore/)
 
 ## About
 SeeMore is a simple Paper plugin that sets a player's server-side view distance according to their client-side render distance.
