@@ -4,14 +4,13 @@ import com.froobworld.seemore.SeeMore;
 import com.froobworld.seemore.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
-public class ViewDistanceController implements Listener {
+public class ViewDistanceController {
     private static final int MAX_UPDATE_ATTEMPTS = 10;
     private final SeeMore seeMore;
     private final Map<UUID, Integer> targetViewDistanceMap = new ConcurrentHashMap<>();
