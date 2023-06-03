@@ -25,7 +25,7 @@ public class ReloadCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         try {
             seeMore.reload();
-            sender.sendMessage(text("Plugin reloaded.", NamedTextColor.YELLOW));
+            sender.sendMessage(text("Plugin reloaded.", NamedTextColor.GRAY));
         } catch (Exception e) {
             sender.sendMessage(text("There was an error while reloading the plugin. See console for details.", NamedTextColor.RED));
             e.printStackTrace();
