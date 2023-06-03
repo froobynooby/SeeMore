@@ -1,0 +1,17 @@
+# Configuration for SeeMore.
+
+# Please don't change this!
+version: 1
+
+# The delay (in ticks) before a player's view distance is lowered after their client settings change.
+#  * This stops players overloading the server by constantly changing their view distance.
+update-delay: 600
+
+# These settings can be specified per world.
+#  * Note: If a world is not listed here or if a setting is missing, it will use the settings listed under the default
+#    section.
+world-settings:
+  default:
+    # The maximum view distance a player in this world can have.
+    # Set to -1 to use the server's configured view distance for this world.
+    maximum-view-distance: -1

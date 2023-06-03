@@ -1,0 +1,36 @@
+name: SeeMore
+main: com.froobworld.seemore.SeeMore
+version: ${version}
+api-version: 1.17
+authors: [froobynooby]
+description: Per-player view distance based on client settings.
+folia-supported: true
+
+commands:
+  seemore:
+    description: The base command for SeeMore.
+
+permissions:
+  seemore.command.*:
+    description: Access to all SeeMore subcommands.
+    default: op
+    children:
+      - seemore.command.seemore
+      - seemore.command.reload
+      - seemore.command.average
+
+  seemore.command.seemore:
+    description: Access to the /seemore command.
+    default: op
+
+  seemore.command.average:
+    description: Access to the /seemore average command.
+    default: op
+    children:
+      - seemore.command.seemore
+
+  seemore.command.reload:
+    description: Access to the /seemore reload command.
+    default: op
+    children:
+      - seemore.command.seemore
