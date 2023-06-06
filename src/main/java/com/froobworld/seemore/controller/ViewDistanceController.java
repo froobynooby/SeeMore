@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 
@@ -77,15 +78,17 @@ public class ViewDistanceController {
             if (delay > 0) {
                 return seeMore.getSchedulerHook().runTaskDelayed(() -> updateDistance(player, 0, attempts, distanceMap, taskMap, distanceConsumer), delay);
             }
-            return seeMore.getSchedulerHook().runEntityTaskAsap(() -> {
+            CompletableFuture<ScheduledTask> retryTask = new CompletableFuture<>();
+            ScheduledTask updateTask = seeMore.getSchedulerHook().runEntityTaskAsap(() -> {
                 try {
                     distanceConsumer.accept(player, distance);
                 } catch (Throwable ex) {
 
                     // will sometimes fail if the player is not attached to a world yet, so retry after 20 ticks
-                    updateDistance(player, 20, attempts + 1, distanceMap, taskMap, distanceConsumer);
+                    retryTask.complete(seeMore.getSchedulerHook().runTask(() -> updateDistance(player, 20, attempts + 1, distanceMap, taskMap, distanceConsumer)));
                 }
             }, null, player);
+            return retryTask.getNow(updateTask);
         });
     }
 
