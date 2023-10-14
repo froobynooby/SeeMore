@@ -54,6 +54,11 @@ public class PlayersCommand implements CommandExecutor, TabCompleter {
             TreeMap<Integer, List<String>> finalPlayerViewDistanceMap = new TreeMap<>(Collections.reverseOrder());
             finalPlayerViewDistanceMap.putAll(playerViewDistanceMap);
 
+            if (finalPlayerViewDistanceMap.isEmpty()) {
+                sender.sendMessage(text("There are no players online.", NamedTextColor.GRAY));
+                return;
+            }
+
             sender.sendMessage(text("Players by view distance:", NamedTextColor.GRAY));
             for (Map.Entry<Integer, List<String>> entry : finalPlayerViewDistanceMap.entrySet()) {
                 List<Component> playerNames = entry.getValue().stream()

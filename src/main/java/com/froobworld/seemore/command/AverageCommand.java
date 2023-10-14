@@ -75,6 +75,11 @@ public class AverageCommand implements CommandExecutor, TabCompleter {
             }
             double totalEffectiveViewDistance = totalPlayerCount == 0 ? 0 : (Math.sqrt((double) totalChunkCount / (double) totalPlayerCount) - 1.0) / 2.0;
 
+            if (totalPlayerCount == 0) {
+                sender.sendMessage(text("There are no players online.", NamedTextColor.GRAY));
+                return;
+            }
+
             sender.sendMessage(text("Effective average view distance:", NamedTextColor.GRAY));
             sender.sendMessage(
                     text("All worlds: ", NamedTextColor.GOLD)
