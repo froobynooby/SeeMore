@@ -1,11 +1,14 @@
 # Configuration for SeeMore.
 
 # Please don't change this!
-version: 1
+version: 2
 
 # The delay (in ticks) before a player's view distance is lowered after their client settings change.
 #  * This stops players overloading the server by constantly changing their view distance.
 update-delay: 600
+
+# Whether the plugin should log to the console when it changes a player's view distance.
+log-changes: true
 
 # These settings can be specified per world.
 #  * Note: If a world is not listed here or if a setting is missing, it will use the settings listed under the default

@@ -1,0 +1,5 @@
+[add-field]
+before=world-settings
+key=log-changes
+value=false
+comment=# Whether the plugin should log to the console when it changes a player's view distance.

@@ -18,9 +18,11 @@ public class ViewDistanceController {
     private final Map<UUID, Integer> targetSendDistanceMap = new ConcurrentHashMap<>();
     private final Map<UUID, ScheduledTask> viewDistanceUpdateTasks = new ConcurrentHashMap<>();
     private final Map<UUID, ScheduledTask> sendDistanceUpdateTasks = new ConcurrentHashMap<>();
+    private final ViewDistanceUpdateLogger viewDistanceUpdateLogger;
 
     public ViewDistanceController(SeeMore seeMore) {
         this.seeMore = seeMore;
+        this.viewDistanceUpdateLogger = new ViewDistanceUpdateLogger(seeMore);
         seeMore.getSchedulerHook().runRepeatingTask(this::cleanMaps, 1200, 1200);
         Bukkit.getPluginManager().registerEvents(new ViewDistanceUpdater(this), seeMore);
     }
@@ -28,12 +30,12 @@ public class ViewDistanceController {
     public void updateAllPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             seeMore.getSchedulerHook().runEntityTaskAsap(() -> {
-                setTargetViewDistance(player, player.getClientViewDistance(), false);
+                setTargetViewDistance(player, player.getClientViewDistance(), false, true);
             }, null, player);
         }
     }
 
-    public void setTargetViewDistance(Player player, int clientViewDistance, boolean testDelay) {
+    public void setTargetViewDistance(Player player, int clientViewDistance, boolean testDelay, boolean initialUpdate) {
         int floor = player.getWorld().getSimulationDistance();
         int ceiling = Math.min(seeMore.getSeeMoreConfig().worldSettings.of(player.getWorld()).maximumViewDistance.get(), 32);
 
@@ -52,15 +54,22 @@ public class ViewDistanceController {
         } catch (Exception ignored) {}
 
         updateSendDistance(player);
-        updateViewDistance(player, delay);
+        updateViewDistance(player, delay, clientViewDistance, initialUpdate);
     }
 
     private void updateSendDistance(Player player) {
         updateDistance(player, 0, 0, targetSendDistanceMap, sendDistanceUpdateTasks, Player::setSendViewDistance);
     }
 
-    private void updateViewDistance(Player player, long delay) {
-        updateDistance(player, delay, 0, targetViewDistanceMap, viewDistanceUpdateTasks, Player::setViewDistance);
+    private void updateViewDistance(Player player, long delay, int clientViewDistance, boolean initialUpdate) {
+        updateDistance(player, delay, 0, targetViewDistanceMap, viewDistanceUpdateTasks, (p, viewDistance) -> {
+            if (p.getViewDistance() != viewDistance || initialUpdate) { // always update if we've not seen them before
+                p.setViewDistance(viewDistance);
+                if (seeMore.getSeeMoreConfig().logChanges.get()) {
+                    viewDistanceUpdateLogger.logUpdate(player, String.format("Set view distance of %s to %s (client view distance is %s).", p.getName(), viewDistance, clientViewDistance));
+                }
+            }
+        });
     }
 
     private void updateDistance(Player player, long delay, int attempts, Map<UUID, Integer> distanceMap, Map<UUID, ScheduledTask> taskMap, BiConsumer<Player, Integer> distanceConsumer) {

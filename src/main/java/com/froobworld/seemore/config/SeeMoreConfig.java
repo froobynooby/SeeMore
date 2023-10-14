@@ -9,7 +9,7 @@ import org.bukkit.World;
 import java.io.File;
 
 public class SeeMoreConfig extends NabConfiguration {
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
 
     public SeeMoreConfig(SeeMore seeMore) {
         super(
@@ -22,6 +22,9 @@ public class SeeMoreConfig extends NabConfiguration {
 
     @Entry(key = "update-delay")
     public final ConfigEntry<Integer> updateDelay = ConfigEntries.integerEntry();
+
+    @Entry(key = "log-changes")
+    public final ConfigEntry<Boolean> logChanges = new ConfigEntry<>();
 
     @SectionMap(key = "world-settings", defaultKey = "default")
     public final ConfigSectionMap<World, WorldSettings> worldSettings = new ConfigSectionMap<>(World::getName, WorldSettings.class, true);

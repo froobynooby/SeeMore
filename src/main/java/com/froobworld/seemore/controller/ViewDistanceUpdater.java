@@ -26,7 +26,7 @@ public class ViewDistanceUpdater implements Listener {
 
         if (event.hasViewDistanceChanged() || !seen) {
             seenBefore.add(event.getPlayer().getUniqueId());
-            controller.setTargetViewDistance(event.getPlayer(), event.getViewDistance(), seen);
+            controller.setTargetViewDistance(event.getPlayer(), event.getViewDistance(), seen, !seen);
         }
     }
 
@@ -37,7 +37,7 @@ public class ViewDistanceUpdater implements Listener {
 
     @EventHandler
     private void onWorldChange(PlayerChangedWorldEvent event) {
-        controller.setTargetViewDistance(event.getPlayer(), event.getPlayer().getClientViewDistance(), false);
+        controller.setTargetViewDistance(event.getPlayer(), event.getPlayer().getClientViewDistance(), false, false);
     }
 
 }
