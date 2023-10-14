@@ -21,11 +21,13 @@ public class SeeMoreCommand implements CommandExecutor, TabCompleter {
     private final SeeMore seeMore;
     private final AverageCommand averageCommand;
     private final ReloadCommand reloadCommand;
+    private final PlayersCommand playersCommand;
 
     public SeeMoreCommand(SeeMore seeMore) {
         this.seeMore = seeMore;
         this.averageCommand = new AverageCommand(seeMore);
         this.reloadCommand = new ReloadCommand(seeMore);
+        this.playersCommand = new PlayersCommand(seeMore);
     }
 
     @Override
@@ -52,6 +54,14 @@ public class SeeMoreCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
             }
+            if (args[0].equalsIgnoreCase("players")) {
+                if (sender.hasPermission("seemore.command.players")) {
+                    return playersCommand.onCommand(sender, command, label, args);
+                } else {
+                    sender.sendMessage(NO_PERMISSION);
+                    return false;
+                }
+            }
         }
         sender.sendMessage(text("SeeMore v" + seeMore.getDescription().getVersion(), NamedTextColor.GRAY));
         sender.sendMessage(empty());
@@ -60,6 +70,9 @@ public class SeeMoreCommand implements CommandExecutor, TabCompleter {
         }
         if (sender.hasPermission("seemore.command.average")) {
             sender.sendMessage(text("/seemore average"));
+        }
+        if (sender.hasPermission("seemore.command.players")) {
+            sender.sendMessage(text("/seemore players"));
         }
         return true;
     }
@@ -73,6 +86,9 @@ public class SeeMoreCommand implements CommandExecutor, TabCompleter {
             }
             if (sender.hasPermission("seemore.command.average")) {
                 suggestions.add("average");
+            }
+            if (sender.hasPermission("seemore.command.players")) {
+                suggestions.add("players");
             }
         }
 

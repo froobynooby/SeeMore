@@ -18,6 +18,7 @@ permissions:
       - seemore.command.seemore
       - seemore.command.reload
       - seemore.command.average
+      - seemore.command.players
 
   seemore.command.seemore:
     description: Access to the /seemore command.
@@ -31,6 +32,12 @@ permissions:
 
   seemore.command.reload:
     description: Access to the /seemore reload command.
+    default: op
+    children:
+      - seemore.command.seemore
+
+  seemore.command.players:
+    description: Access to the /seemore players command.
     default: op
     children:
       - seemore.command.seemore
